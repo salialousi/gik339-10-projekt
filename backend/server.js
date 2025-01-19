@@ -5,10 +5,9 @@ const sqlite3 = require('sqlite3').verbose();
 const app = express();
 const PORT = 3000;
 
-// Middleware
 app.use(bodyParser.json());
 
-// Database setup
+
 const db = new sqlite3.Database('./resources.db', (err) => {
   if (err) {
     console.error(err.message);
@@ -23,14 +22,14 @@ db.serialize(() => {
     description TEXT
   )`);
 
-  // Insert sample data into the database
+ 
   const insertSQL = 'INSERT INTO resources (name, description) VALUES (?, ?)';
   db.run(insertSQL, ['Alice', 'Project Manager at TechCorp']);
   db.run(insertSQL, ['Bob', 'Software Engineer at CodeBase']);
   db.run(insertSQL, ['Charlie', 'UI/UX Designer at DesignHub']);
 });
 
-// REST API Routes
+
 app.get('/resources', (req, res) => {
   db.all('SELECT * FROM resources', [], (err, rows) => {
     if (err) {
@@ -97,7 +96,7 @@ app.delete('/resources/:id', (req, res) => {
   });
 });
 
-// Start the server
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
