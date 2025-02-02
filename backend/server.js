@@ -1,12 +1,13 @@
 const express = require('express');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const sqlite3 = require('sqlite3').verbose();
 
 const app = express();
 const PORT = 3000;
 
+app.use(cors());
 app.use(bodyParser.json());
-
 
 const db = new sqlite3.Database('./resources.db', (err) => {
   if (err) {
@@ -22,11 +23,15 @@ db.serialize(() => {
     description TEXT
   )`);
 
- 
+
+  db.get("SELECT COUNT(*) AS count FROM resources", (err, row) => {
+    if (row.count === 0) {
   const insertSQL = 'INSERT INTO resources (name, description) VALUES (?, ?)';
   db.run(insertSQL, ['Alice', 'Project Manager at TechCorp']);
   db.run(insertSQL, ['Bob', 'Software Engineer at CodeBase']);
   db.run(insertSQL, ['Charlie', 'UI/UX Designer at DesignHub']);
+  }
+ });
 });
 
 

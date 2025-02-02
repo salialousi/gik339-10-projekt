@@ -3,12 +3,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const list = document.getElementById('resource-list');
   const API_URL = 'http://localhost:3000/resources';
 
+
   const fetchResources = async () => {
     try {
       const response = await fetch(API_URL);
       const resources = await response.json();
       list.innerHTML = resources.map(resource => `
-        <li class="list-group-item d-flex justify-content-between align-items-center bg-dark text-light">
+        <li class="list-group-item d-flex justify-content-between align-items-center">
           <span><strong>${resource.name}</strong>: ${resource.description}</span>
           <div>
             <button class="btn btn-warning btn-sm me-2" onclick="editResource(${resource.id}, '${resource.name}', '${resource.description}')">Edit</button>
@@ -20,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('Error fetching resources:', error);
     }
   };
+
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -49,6 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+
   window.deleteResource = async (id) => {
     try {
       await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
@@ -58,11 +61,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+ 
   window.editResource = (id, name, description) => {
     document.getElementById('resource-id').value = id;
     document.getElementById('name').value = name;
     document.getElementById('description').value = description;
   };
+
 
   fetchResources();
 });
